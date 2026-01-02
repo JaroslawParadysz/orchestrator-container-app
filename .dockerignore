@@ -1,0 +1,16 @@
+# Docker ignore file for Azure Functions
+**/bin/
+**/obj/
+**/.vs/
+**/.vscode/
+**/.idea/
+**/.git/
+**/.gitignore
+**/.dockerignore
+**/node_modules/
+**/local.settings.json
+**/*.user
+**/*.suo
+**/*.cache
+**/.DS_Store
+**/Thumbs.db
