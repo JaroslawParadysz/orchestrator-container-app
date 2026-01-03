@@ -3,6 +3,7 @@ using System.Text.Json;
 using Azure.Identity;
 using Azure.Storage.Blobs;
 using Azure.Storage.Files.Shares;
+using Azure.Storage.Files.Shares.Models;
 using Azure.Storage.Queues.Models;
 using Microsoft.Extensions.Logging;
 
@@ -41,7 +42,13 @@ public class MessageProcessingService : IMessageProcessingService
             var directoryClient = shareClient.GetDirectoryClient("files");
             var fileClient = directoryClient.GetFileClient("file.txt");
             
-            var downloadInfo = await fileClient.DownloadAsync(options:null, cancellationToken);
+            var downloadOptions = new ShareFileDownloadOptions
+            {
+                Conditions = new ShareFileRequestConditions()
+            };
+            downloadOptions.Conditions.LeaseId = null;
+            
+            var downloadInfo = await fileClient.DownloadAsync(downloadOptions, cancellationToken);
             using var reader = new StreamReader(downloadInfo.Value.Content);
             fileShareContent = await reader.ReadToEndAsync(cancellationToken);
             
