@@ -8,9 +8,10 @@ This repository demonstrates how to deploy an Azure Function with a Queue Trigge
 
 - **Azure Function Queue Trigger**: Processes messages from Azure Storage Queue
 - **Blob Storage Integration**: Saves processed message data as JSON files to Azure Blob Storage
+- **File Share Integration**: Reads file content from Azure File Share and includes it in the processed data
 - **Containerized Deployment**: Packaged as a Docker container for deployment
 - **Azure Container Apps**: Hosted in Azure Container Apps environment
-- **Managed Identity Authentication**: Secure, passwordless connection to Azure Storage (Queue and Blob) without storing connection strings or access keys
+- **Managed Identity Authentication**: Secure, passwordless connection to Azure Storage (Queue, Blob, and File Share) without storing connection strings or access keys
 
 ## Architecture
 
@@ -26,12 +27,15 @@ To configure the Azure Function to use Managed Identity for Storage Queue access
    - `Storage Queue Data Reader`
    - `Storage Queue Data Message Processor`
    - `Storage Blob Data Contributor`
+   - `Storage File Data Privileged Contributor`
 
 3. **Add the following environment variables** to the container:
    - `StorageQueue__queueServiceUri` - The URI of the queue service (e.g., `https://<storage-account>.queue.core.windows.net`)
    - `StorageQueue__accountName` - The name of the storage account
    - `StorageBlob__blobServiceUri` - The URI of the blob service (e.g., `https://<storage-account>.blob.core.windows.net`)
    - `StorageBlob__containerName` - The blob container name (defaults to `processed-messages`)
+   - `StorageFile__fileServiceUri` - The URI of the file service (e.g., `https://<storage-account>.file.core.windows.net`)
+   - `StorageFile__shareName` - The name of the file share
 
 ## Useful Links
 

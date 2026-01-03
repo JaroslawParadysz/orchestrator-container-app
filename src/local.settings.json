@@ -7,6 +7,8 @@
     "StorageQueue__queueServiceUri": "",
     "StorageQueue__accountName": "",
     "StorageBlob__blobServiceUri": "",
-    "StorageBlob__containerName": "processed-messages"
+    "StorageBlob__containerName": "processed-messages",
+    "StorageFile__fileServiceUri": "",
+    "StorageFile__shareName": ""
   }
 }
