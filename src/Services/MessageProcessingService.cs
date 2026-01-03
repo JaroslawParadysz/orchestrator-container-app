@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json;
+using Azure.Core;
 using Azure.Identity;
 using Azure.Storage.Blobs;
 using Azure.Storage.Files.Shares;
@@ -34,25 +35,23 @@ public class MessageProcessingService : IMessageProcessingService
         _logger.LogInformation("Processing message: {MessageId}", queueMessage.MessageId);
         
         // Read file content from file share using managed identity
+        // Using custom HTTP pipeline policy to add required x-ms-file-request-intent header
         string? fileShareContent = null;
         try
         {
-            var fileServiceClient = new ShareServiceClient(new Uri(_fileServiceUri), new DefaultAzureCredential());
+            var shareClientOptions = new ShareClientOptions();
+            shareClientOptions.AddPolicy(new FileRequestIntentPolicy(), HttpPipelinePosition.PerCall);
+            
+            var fileServiceClient = new ShareServiceClient(new Uri(_fileServiceUri), new DefaultAzureCredential(), shareClientOptions);
             var shareClient = fileServiceClient.GetShareClient(_fileShareName);
             var directoryClient = shareClient.GetDirectoryClient("files");
             var fileClient = directoryClient.GetFileClient("file.txt");
             
-            var downloadOptions = new ShareFileDownloadOptions
-            {
-                Conditions = new ShareFileRequestConditions()
-            };
-            downloadOptions.Conditions.LeaseId = null;
-            
-            var downloadInfo = await fileClient.DownloadAsync(downloadOptions, cancellationToken);
+            var downloadInfo = await fileClient.DownloadAsync(cancellationToken: cancellationToken);
             using var reader = new StreamReader(downloadInfo.Value.Content);
             fileShareContent = await reader.ReadToEndAsync(cancellationToken);
             
-            _logger.LogInformation("Successfully read file from file share");
+            _logger.LogInformation("Successfully read file from file share using managed identity");
         }
         catch (Exception ex)
         {

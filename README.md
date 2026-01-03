@@ -19,7 +19,7 @@ The solution eliminates the need for connection strings by leveraging Azure Mana
 
 ## Minimal Setup
 
-To configure the Azure Function to use Managed Identity for Storage Queue access:
+To configure the Azure Function to use Managed Identity for Storage access:
 
 1. **Enable System-Assigned Managed Identity** on the **Container App** level (NOT on the Container App Environment level)
 
