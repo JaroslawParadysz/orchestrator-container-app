@@ -40,7 +40,7 @@ public class MessageProcessingService : IMessageProcessingService
         try
         {
             var shareClientOptions = new ShareClientOptions();
-            shareClientOptions.AddPolicy(new FileRequestIntentPolicy(), HttpPipelinePosition.PerCall);
+            //shareClientOptions.AddPolicy(new FileRequestIntentPolicy(), HttpPipelinePosition.PerCall);
             
             var fileServiceClient = new ShareServiceClient(new Uri(_fileServiceUri), new DefaultAzureCredential(), shareClientOptions);
             var shareClient = fileServiceClient.GetShareClient(_fileShareName);
