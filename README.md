@@ -7,9 +7,10 @@ This repository demonstrates how to deploy an Azure Function with a Queue Trigge
 ## Key Features
 
 - **Azure Function Queue Trigger**: Processes messages from Azure Storage Queue
+- **Blob Storage Integration**: Saves processed message data as JSON files to Azure Blob Storage
 - **Containerized Deployment**: Packaged as a Docker container for deployment
 - **Azure Container Apps**: Hosted in Azure Container Apps environment
-- **Managed Identity Authentication**: Secure, passwordless connection to Azure Storage Queue without storing connection strings
+- **Managed Identity Authentication**: Secure, passwordless connection to Azure Storage (Queue and Blob) without storing connection strings or access keys
 
 ## Architecture
 
@@ -24,10 +25,13 @@ To configure the Azure Function to use Managed Identity for Storage Queue access
 2. **Assign the following RBAC roles** to the Managed Identity on the Azure Storage Account:
    - `Storage Queue Data Reader`
    - `Storage Queue Data Message Processor`
+   - `Storage Blob Data Contributor`
 
 3. **Add the following environment variables** to the container:
    - `StorageQueue__queueServiceUri` - The URI of the queue service (e.g., `https://<storage-account>.queue.core.windows.net`)
    - `StorageQueue__accountName` - The name of the storage account
+   - `StorageBlob__blobServiceUri` - The URI of the blob service (e.g., `https://<storage-account>.blob.core.windows.net`)
+   - `StorageBlob__containerName` - The blob container name (defaults to `processed-messages`)
 
 ## Useful Links
 
